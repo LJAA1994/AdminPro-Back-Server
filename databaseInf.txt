@@ -1,0 +1,3 @@
+user:lucastelecoinfo
+password:EnyEo7k9ueT9cj9W
+BBDD connection: mongodb+srv://lucastelecoinfo:EnyEo7k9ueT9cj9W@angularadvanceproyect.7pmlbo7.mongodb.net/test
