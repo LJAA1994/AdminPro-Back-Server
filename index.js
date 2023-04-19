@@ -1,7 +1,7 @@
-const express = require ('express');
-const {dbConnection} = require ('./database/config.js');
-const cors = require('cors')
-require('dotenv').config();
+const express = require("express");
+const { dbConnection } = require("./database/config.js");
+const cors = require("cors");
+require("dotenv").config();
 
 //Create express SERVER
 const app = express();
@@ -12,16 +12,15 @@ dbConnection();
 //Config CORS
 app.use(cors());
 
+// LECTURA PARSEO Body
+app.use(express.json())
 
 //Routes
-app.get('/', (req,resp) => {
-    resp.json({
-        "ok":true,
-        "msg":'Se ha obtenido respuesta'
-    })
-})
+app.use("/api/users", require('./routes/users.routes'));
+app.use("/api/login", require('./routes/auth.routes'));
+
 
 //Start SERVER in PORT
 app.listen(process.env.PORT, () => {
-    console.log(`Servidor corriendo en el PUERTO =` + process.env.PORT);
-})
+  console.log(`Servidor corriendo en el PUERTO =` + process.env.PORT);
+});
