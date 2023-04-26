@@ -14,7 +14,9 @@ const validateJwt = (req = request, resp = response, next) => {
     })
   }
   try {
+    //Payload del JWT, extreamos ID
     const user = jwt.verify(token, process.env.SECRET_KEY);
+    req.userId = user.id;
     next();
   }catch(error) {
     console.log(error);

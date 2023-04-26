@@ -8,11 +8,23 @@ const User = require("../models/users.model");
 //Helper JWT
 const { generateJWT } = require("../helpers/jwt");
 
-const getUsers = async (req, resp = response) => {
-  const users = await User.find({}, "name email");
+const getUsers = async (req = request, resp = response) => {
+  //PAGINADO  query.param se rescata de la URI
+  const from = Number(req.query.from) || 0; 
+ 
+//Asincrono y puede que no se de al mismo tiempo
+  // const users = await User.find({}, "name email").skip(from).limit(5)
+  // const total =  await User.count();
+  //Usamos PROMISES ALL para que los resultados lleguen al mismo tiempo
+  const [users, total] = await Promise.all([
+    User.find({}, "name email").skip(from).limit(5),
+    User.count()
+  ])
+  //PAGINADO
   resp.json({
     ok: true,
     users: users,
+    total,
     msg: "Se han obtenido todos los usuarios",
   });
 };

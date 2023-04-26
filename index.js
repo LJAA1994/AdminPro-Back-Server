@@ -17,7 +17,11 @@ app.use(express.json())
 
 //Routes
 app.use("/api/users", require('./routes/users.routes'));
+app.use("/api/hospitals", require('./routes/hospitals.routes'));
+app.use("/api/medicians", require('./routes/medicians.routes'));
 app.use("/api/login", require('./routes/auth.routes'));
+app.use("/api/browser", require('./routes/browser.routes'));
+app.use("/api/uploads", require('./routes/uploads.routes'));
 
 
 //Start SERVER in PORT
