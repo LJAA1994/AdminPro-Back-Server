@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/users.model");
 //Helper JWT
 const { generateJWT } = require("../helpers/jwt");
+const { googleVerify } = require("../helpers/google-verify");
 
 login = async (req = request, resp = response) => {
   const { password, email } = req.body;
@@ -44,6 +45,46 @@ login = async (req = request, resp = response) => {
   }
 };
 
+const loginGoogle = async (req = request, resp = response) => {
+  console.log(req.body.token);
+  try {
+    const googleUser = await googleVerify(req.body.token);
+    const { email, name, picture } = googleUser;
+    const existUser = await User.findOne({ email });
+    let newUser;
+    if (!existUser) {
+      newUser = new User({
+        name,
+        email,
+        password: "@@@",//Es obligatorio y la inventamos para que se pueda guardar el usuario
+        image: picture,
+        google: true,
+      });
+    } else {
+      newUser = existUser;
+      newUser.google = true;
+    }
+    //Guardar Usuario
+    await newUser.save();
+
+    //Generar Token despues de Login con Google
+    const token = await generateJWT(newUser);
+
+    resp.json({
+      ok: true,
+      googleUser,
+      token,
+      msg: "Usuario logueado con Google",
+    });
+  } catch (error) {
+    resp.status(500).json({
+      ok: false,
+      msg: "Error, token de google incorrecto",
+    });
+  }
+};
+
 module.exports = {
   login,
+  loginGoogle,
 };

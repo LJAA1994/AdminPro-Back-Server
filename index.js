@@ -12,6 +12,8 @@ dbConnection();
 //Config CORS
 app.use(cors());
 
+//Arrancar APP de Prueba para Google 'index.html'
+app.use(express.static('public'))
 // LECTURA PARSEO Body
 app.use(express.json())
 

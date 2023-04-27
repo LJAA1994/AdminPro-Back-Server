@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google Sign</title>
+  </head>
+  <body>
+    <h1>Google Sign</h1>
+    <div id="buttonDiv" style="width: 400px"></div>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+      // TEST de APP
+      var url = "http://localhost:3000/api/login/google";
+      // TEST de APP
+      function handleCredentialResponse(response) {
+        //TEST de APP Google
+        fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: response.credential }),
+        })
+          .then((resp) => resp.json())
+          .then((data) => console.log("Nuestro SERVER", data))
+          .catch((err) => {
+            console.log("Ha habido un error al iniciar sesion con Google");
+          });
+        //TEST de APP Google
+      }
+      window.onload = function () {
+        google.accounts.id.initialize({
+          client_id:
+            "159224795755-t0bn4j2jg0s7j6pisbm97s6hd897ka70.apps.googleusercontent.com",
+          callback: handleCredentialResponse,
+        });
+        google.accounts.id.renderButton(
+          document.getElementById("buttonDiv"),
+          { theme: "outline", size: "large" } // customization attributes
+        );
+        google.accounts.id.prompt(); // also display the One Tap dialog
+      };
+    </script>
+  </body>
+</html>
