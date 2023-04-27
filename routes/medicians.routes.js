@@ -33,6 +33,9 @@ router.put(
   "/:id",
   [
     validateJwt,
+    check('name', 'El nombre es obligatorio').not().isEmpty(),
+    //Comprobar que el ID relacional es un ID correcto de Mongo
+    check('hospital', 'El Id del hospital debe ser correcto').isMongoId(),
     validatorFields,
   ],
   updateMedicians

@@ -39,17 +39,59 @@ const postMedicians = async (req = request, resp = response) => {
     });
   }
 };
-const updateMedicians = (req = request, resp = response) => {
-  resp.json({
-    ok: true,
-    msg: "Medico actualizado",
-  });
+const updateMedicians = async(req = request, resp = response) => {
+  const id = req.params.id;
+
+  try {
+    const medician = await Medicians.findById(id);
+    if (!medician) {
+      resp.status(404).json({
+        ok: false,
+        msg: "No existe un medico con ese ID",
+      });
+    }
+    const medicianChanges = { ...req.body, user: req.userId };
+    const updateMedician = await Medicians.findByIdAndUpdate(
+      id,
+      medicianChanges,
+      { new: true }
+    );
+
+    resp.json({
+      ok: true,
+      updateMedician,
+      msg: "Hospital Actualizado",
+    });
+  } catch (error) {
+    resp.json({
+      ok: false,
+      msg: "Ha habido un error al actualizar el medico",
+    });
+  }
 };
-const deleteMedicians = (req = request, resp = response) => {
-  resp.json({
-    ok: true,
-    msg: "Medico borrado",
-  });
+const deleteMedicians = async(req = request, resp = response) => {
+  const id = req.params.id;
+  try {
+    const medician = await Medicians.findById(id);
+    if (!medician) {
+      resp.status(404).json({
+        ok: false,
+        msg: "No existe un medico con ese ID",
+      });
+    }
+    const deleteMedician = await Medicians.findByIdAndDelete(id);
+
+    resp.json({
+      ok: true,
+      deleteMedician,
+      msg: "Medico Eliminado",
+    });
+  } catch (error) {
+    resp.json({
+      ok: false,
+      msg: "Ha habido un error al eliminar el medico",
+    });
+  }
 };
 
 module.exports = {

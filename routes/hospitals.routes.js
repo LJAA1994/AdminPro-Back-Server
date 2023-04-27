@@ -32,6 +32,7 @@ router.put(
   "/:id",
   [
     validateJwt,
+    check('name','El nombre es obligatorio').not().isEmpty(),
     validatorFields,
   ],
   updateHospitals

@@ -56,7 +56,7 @@ const loginGoogle = async (req = request, resp = response) => {
       newUser = new User({
         name,
         email,
-        password: "@@@",//Es obligatorio y la inventamos para que se pueda guardar el usuario
+        password: "@@@", //Es obligatorio y la inventamos para que se pueda guardar el usuario
         image: picture,
         google: true,
       });
@@ -84,7 +84,19 @@ const loginGoogle = async (req = request, resp = response) => {
   }
 };
 
+const renewToken = async (req = request, resp = response) => {
+  const userId = req.userId;
+  const user = await User.findById(userId);
+  const token = await generateJWT(user);
+  resp.json({
+    ok: true,
+    token,
+    msg: "Token renovado correctamente",
+  });
+};
+
 module.exports = {
   login,
   loginGoogle,
+  renewToken,
 };
